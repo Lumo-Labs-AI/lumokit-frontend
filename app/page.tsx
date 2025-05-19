@@ -541,7 +541,7 @@ export default function Home() {
               
               {/* Redesigned Documentation Button - Matched Size with Wallet Button */}
               <Link
-                href="https://lumolabs.ai"
+                href="https://www.lumolabs.ai/lumokit-solana-ai-toolkit-framwork/introduction"
                 target="_blank"
                 className="relative overflow-hidden group
                   px-8 py-4 min-w-[240px] 

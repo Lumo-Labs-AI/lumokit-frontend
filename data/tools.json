@@ -6,7 +6,7 @@
     "name": "Wallet Portfolio",
     "category": "Common",
     "description": "Get detailed information about all tokens held in a wallet. Useful when you need to check a user's current token balances.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/wallet-portfolio-tool"
   },
   {
     "icon_url": "/lumo-icon.png",
@@ -15,7 +15,7 @@
     "name": "Token Information",
     "category": "Common",
     "description": "Get token information by name or ticker. Useful when you need to find the contract address for a token.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/token-identification-tool"
   },
   {
     "icon_url": "/rugcheck.jpg",
@@ -24,7 +24,7 @@
     "name": "Rugcheck Token Information",
     "category": "Token Analysis",
     "description": "Get detailed token information including creator details, supply, top holders, and insiders information. Provides insights about token creator, active supply, insider holders, and liquidity markets.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/rugcheck-token-information-tool"
   },
   {
     "icon_url": "/fluxbeam.png",
@@ -33,7 +33,7 @@
     "name": "Fluxbeam Token Price",
     "category": "Token Price",
     "description": "Get the current price of a token in USD (USD) from FluxBeam.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/fluxbeam-token-price"
   },
   {
     "icon_url": "/birdeye.png",
@@ -42,7 +42,7 @@
     "name": "Birdeye Token Trending",
     "category": "Trends",
     "description": "Get a list of top trending tokens on Solana with prices, market caps, and volume data.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/birdeye-token-trending"
   },
   {
     "icon_url": "/birdeye.png",
@@ -51,7 +51,7 @@
     "name": "Birdeye All Time Trades",
     "category": "Token Analysis",
     "description": "Get comprehensive trade statistics (buys, sells, volumes) of all time for a specific token on Solana.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/birdeye-all-time-trades"
   },
   {
     "icon_url": "/cmc.png",
@@ -60,7 +60,7 @@
     "name": "CoinMarketCap Crypto News",
     "category": "News",
     "description": "Get the latest crypto news from CoinMarketCap.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/coinmarketcap-crypto-news"
   },
   {
     "icon_url": "/cnews.png",
@@ -69,7 +69,7 @@
     "name": "Crypto.News Memecoins News",
     "category": "News",
     "description": "Get the latest memecoin news from Crypto.news.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/crypto.news-memecoin-news"
   },
   {
     "icon_url": "/geckoterminal.svg",
@@ -78,7 +78,7 @@
     "name": "GeckoTerminal Trending Pump Tokens",
     "category": "Trends",
     "description": "Get the latest trending tokens from the Pump.fun category on GeckoTerminal.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/geckoterminal-trending-pump.fun-tool"
   },
   {
     "icon_url": "/coingecko.png",
@@ -87,7 +87,7 @@
     "name": "CoinGecko Global Crypto Data",
     "category": "Crypto",
     "description": "Get global cryptocurrency market data including market cap, volume, and dominance percentages.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/coingecko-global-crypto-data-tool"
   },
   {
     "icon_url": "/coingecko.png",
@@ -96,7 +96,7 @@
     "name": "CoinGecko Trending Crypto & NFT",
     "category": "Trends",
     "description": "Get top trending coins and NFTs on CoinGecko based on user searches and trading volume.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/coingecko-trending-crypto-tool"
   },
   {
     "icon_url": "/coingecko.png",
@@ -105,7 +105,7 @@
     "name": "CoinGecko Exchange Rates",
     "category": "Crypto",
     "description": "Get Bitcoin-to-currency exchange rates for major cryptocurrencies, fiat currencies, and commodities.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/coingecko-exchange-rates-tool"
   },
   {
     "icon_url": "/coingecko.png",
@@ -114,7 +114,7 @@
     "name": "CoinGecko Coin Data",
     "category": "Crypto",
     "description": "Get detailed market data (price, volume, market cap) for a specific cryptocurrency. Provide the coin name like 'bitcoin', 'ethereum', or 'solana'.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/coingecko-coin-data-tool"
   },
   {
     "icon_url": "/cmc.png",
@@ -123,7 +123,7 @@
     "name": "CoinMarketCap Trending Coins",
     "category": "Crypto",
     "description": "Get a list of all active cryptocurrencies with latest market data from CoinMarketCap.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/coinmarketcap-trending-coins-tool"
   },
   {
     "icon_url": "/dexscreener.png",
@@ -132,7 +132,7 @@
     "name": "DexScreener Top Boosted Tokens",
     "category": "Misc",
     "description": "Get the tokens with most active boosts on DexScreener, showing popularity and trending projects.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/dexscreener-top-boosts-tool"
   },
   {
     "icon_url": "/dexscreener.png",
@@ -141,7 +141,7 @@
     "name": "DexScreener Token Information",
     "category": "Token Analysis",
     "description": "Get detailed DEX information about Solana tokens including price, volume, liquidity, and trading activity.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/dexscreener-token-information"
   },
   {
     "icon_url": "/jupiter.svg",
@@ -150,7 +150,7 @@
     "name": "Jupiter Token Price",
     "category": "Token Price",
     "description": "Get the current price of one or more Solana tokens in USD from Jupiter. Provide comma-separated token addresses.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/jupiter-token-price"
   },
   {
     "icon_url": "/jupiter.svg",
@@ -159,7 +159,7 @@
     "name": "Jupiter Token Metadata",
     "category": "Token Metadata",
     "description": "Get detailed token information and metadata for a specific Solana token from Jupiter. Provides details like name, symbol, decimals, and other token attributes.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/jupiter-token-metadata-tool"
   },
   {
     "icon_url": "/solana.png",
@@ -168,7 +168,7 @@
     "name": "Solana Send SOL",
     "category": "Solana Actions",
     "description": "Send SOL from agent wallet to a specified Solana address.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/solana-send-sol-tool"
   },
   {
     "icon_url": "/solana.png",
@@ -177,7 +177,7 @@
     "name": "Solana Send SPL Tokens",
     "category": "Solana Actions",
     "description": "Send SPL tokens from agent wallet to a specified Solana address.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/solana-send-spl-tokens-tool"
   },
   {
     "icon_url": "/solana.png",
@@ -186,7 +186,7 @@
     "name": "Solana Burn Tokens",
     "category": "Solana Actions",
     "description": "Burn SPL tokens from agent wallet, permanently removing them from circulation.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/solana-burn-tokens-tool"
   },
   {
     "icon_url": "/jupiter.svg",
@@ -195,7 +195,7 @@
     "name": "Jupiter Swap (Buy/Sell)",
     "category": "Token Trade",
     "description": "Swap tokens on Solana using Jupiter. Provide the input token, output token, amount, and slippage (default 10%).",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/jupiter-swap-buy-sell-tool"
   },
   {
     "icon_url": "/pumpfun.png",
@@ -204,6 +204,6 @@
     "name": "Pump.fun Launch Coin",
     "category": "Token Launch",
     "description": "Launch a new token on Pump.fun platform. Requires token details and agent wallet information.",
-    "read_more": "https://lumolabs.ai"
+    "read_more": "https://www.lumolabs.ai/tools/pump.fun-launch-coin-tool"
   }
 ]
