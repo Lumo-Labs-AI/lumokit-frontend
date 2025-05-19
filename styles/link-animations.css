@@ -1,0 +1,73 @@
+/* Link click animation */
+.link-clicked {
+  animation: link-pulse 0.3s ease-in-out;
+}
+
+@keyframes link-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* External link hover animation */
+.external-link::after {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.external-link:hover::after {
+  transform: translate(2px, -2px);
+}
+
+/* Link hover effect */
+.ai-markdown a {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-markdown a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(158, 66, 68, 0.5);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.ai-markdown a:hover::before {
+  transform: translateX(0);
+}
+
+/* Special style for links that were provided in markdown format */
+.ai-markdown a.markdown-link {
+  font-weight: 500;
+}
+
+/* List item hover animations */
+.ai-markdown .custom-list-item {
+  transition: transform 0.2s ease;
+}
+
+.ai-markdown .custom-list-item:hover {
+  transform: translateX(2px);
+}
+
+.ai-markdown .unordered-list .custom-list-item::before {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.ai-markdown .unordered-list .custom-list-item:hover::before {
+  transform: scale(1.2);
+  color: #9e4244;
+}
