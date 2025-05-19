@@ -131,7 +131,7 @@ const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({ isOpen, onClose }) =>
         // Handle token account not found or insufficient balance
         if (!hasToken) {
           setHasNoTokens(true);
-          throw new Error(`You don&apos;t have any $LUMO tokens in your wallet. Please acquire some tokens before upgrading.`);
+          throw new Error(`You do not have any $LUMO tokens in your wallet. Please acquire some tokens before upgrading.`);
         }
         
         if (tokenBalance < amount) {
