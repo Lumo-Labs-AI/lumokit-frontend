@@ -167,12 +167,9 @@ export default function ChatPage() {
       const data = await response.json();
       
       if (data.success) {
-        // Only update if conversations actually changed
-        // This prevents unnecessary re-renders
+        // Update conversations without comparison to prevent dependency issues
         const newConversations = data.conversations || [];
-        if (JSON.stringify(newConversations) !== JSON.stringify(conversations)) {
-          setConversations(newConversations);
-        }
+        setConversations(newConversations);
       } else {
         console.error("API returned error:", data.error);
       }
@@ -181,7 +178,7 @@ export default function ChatPage() {
     } finally {
       setIsLoadingConversations(false);
     }
-  }, [walletAddress, walletSignature, isAuthenticated, conversations]);
+  }, [walletAddress, walletSignature, isAuthenticated]);
   
   // Initial fetch of conversations
   useEffect(() => {
@@ -330,6 +327,12 @@ export default function ChatPage() {
   // Add state for tracking if stream message has been added
   const [hasAddedStreamMessage, setHasAddedStreamMessage] = useState(false);
   
+  // Check if selected model is a Lumo model
+  const isLumoModel = (modelId: string) => {
+    const lumoModels = ['lumo-70b', 'lumo-8b', 'lumo-deepseek-8b'];
+    return lumoModels.includes(modelId);
+  };
+
   // Stream chat response
   const streamChatResponse = async (userMessageContent: string) => {
     if (!walletAddress || !walletSignature || !isAuthenticated) return;
@@ -358,7 +361,7 @@ export default function ChatPage() {
     // Generate a unique message ID for this response
     const newStreamMessageId = `ai-response-${Date.now()}`;
     
-    // Prepare request body - updated to include model, temperature, and tools
+    // Prepare request body - updated to exclude tools for Lumo models
     const requestBody: ChatApiRequest = {
       public_key: walletAddress,
       signature: walletSignature,
@@ -368,7 +371,7 @@ export default function ChatPage() {
       message: userMessageContent,
       model_name: selectedModel,
       temperature: temperature,
-      tools: selectedTools
+      tools: isLumoModel(selectedModel) ? [] : selectedTools
     };
     
     try {

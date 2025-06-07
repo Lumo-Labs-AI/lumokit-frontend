@@ -3,14 +3,51 @@ import { X, Search, Sliders, Check, Lock, AlertTriangle, ChevronDown, ChevronUp 
 import Image from 'next/image';
 import toolsData from '@/data/tools.json';
 
+// Model interfaces
+interface BaseModel {
+  id: string;
+  name: string;
+  description: string;
+  pro: boolean;
+}
+
+interface LumoModel extends BaseModel {
+  specialty: string;
+}
+
 // Updated models list with correct configurations
-const AVAILABLE_MODELS = [
+const AVAILABLE_MODELS: BaseModel[] = [
   { id: "gpt-4.1-mini", name: "GPT-4.1 Mini", description: "Fast, efficient model for most queries", pro: false },
   { id: "gpt-4.1", name: "GPT-4.1", description: "Latest flagship GPT model for complex tasks", pro: true },
   { id: "gpt-4o", name: "GPT 4o", description: "Fast, intelligent, flexible GPT model", pro: true },
   { id: "anthropic/claude-3.7-sonnet", name: "Claude 3.7 Sonnet", description: "Anthropic's most intelligent model", pro: true },
-  { id: "google/gemini-2.5-pro-preview", name: "Gemini 2.5 Pro Preview", description: "Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks.", pro: true },
+  { id: "google/gemini-2.5-pro-preview", name: "Gemini 2.5 Pro Preview", description: "Google's state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks.", pro: true },
   { id: "meta-llama/llama-4-maverick", name: "Llama 4 Maverick", description: "High-capacity multimodal language model from Meta", pro: true },
+];
+
+// New Lumo models
+const LUMO_MODELS: LumoModel[] = [
+  { 
+    id: "lumo-70b", 
+    name: "Lumo-70B-Instruct", 
+    description: "Advanced 70B model fine-tuned for Solana. Excels in coding, complex conversations, and blockchain development.",
+    pro: false,
+    specialty: "Coding & Conversation"
+  },
+  { 
+    id: "lumo-8b", 
+    name: "Lumo-8B-Instruct", 
+    description: "Efficient 8B model fine-tuned for Solana. Perfect for general conversations and quick responses.",
+    pro: false,
+    specialty: "General Conversation"
+  },
+  { 
+    id: "lumo-deepseek-8b", 
+    name: "Lumo-DeepSeek-R1-8B", 
+    description: "Specialized 8B reasoning model fine-tuned for Solana. Optimized for complex thinking and problem-solving.",
+    pro: false,
+    specialty: "Reasoning & Thinking"
+  },
 ];
 
 interface ToolData {
@@ -51,6 +88,7 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [expandedDescriptions, setExpandedDescriptions] = useState<string[]>([]);
   const [showLimitWarning, setShowLimitWarning] = useState(false);
+  const [isLumoMode, setIsLumoMode] = useState(false);
   const MAX_FREE_TOOLS = 3; // Total tools limit for free users (including default tools)
   
   // Ensure default tools are selected on component mount
@@ -107,6 +145,19 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
       document.removeEventListener('keydown', handleEscKey);
     };
   }, [isOpen, onClose]);
+
+  // Check if selected model is a Lumo model
+  const isLumoModel = (modelId: string) => {
+    return LUMO_MODELS.some(model => model.id === modelId);
+  };
+
+  // Update Lumo mode when model changes
+  useEffect(() => {
+    const currentModelIsLumo = isLumoModel(selectedModel);
+    if (currentModelIsLumo !== isLumoMode) {
+      setIsLumoMode(currentModelIsLumo);
+    }
+  }, [selectedModel, isLumoMode]);
 
   // Toggle tool selection
   const toggleTool = (toolId: string, isDefault: boolean) => {
@@ -167,13 +218,41 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
   
   // Handle model change
   const handleModelChange = (modelId: string) => {
-    if (!isProUser && AVAILABLE_MODELS.find(m => m.id === modelId)?.pro) {
+    const isLumo = isLumoModel(modelId);
+    
+    // Check if it's a pro model and user is not pro
+    const modelData = isLumo 
+      ? LUMO_MODELS.find(m => m.id === modelId)
+      : AVAILABLE_MODELS.find(m => m.id === modelId);
+      
+    if (!isProUser && modelData?.pro) {
       // Can't change to pro model if not a pro user
       return;
     }
     onModelChange(modelId);
+    setIsLumoMode(isLumo);
   };
   
+  // Handle Lumo mode toggle
+  const handleLumoModeToggle = () => {
+    const newLumoMode = !isLumoMode;
+    setIsLumoMode(newLumoMode);
+    
+    if (newLumoMode) {
+      // Switch to first available Lumo model
+      const availableLumoModel = LUMO_MODELS.find(model => !model.pro || isProUser);
+      if (availableLumoModel) {
+        onModelChange(availableLumoModel.id);
+      }
+    } else {
+      // Switch to first available regular model
+      const availableRegularModel = AVAILABLE_MODELS.find(model => !model.pro || isProUser);
+      if (availableRegularModel) {
+        onModelChange(availableRegularModel.id);
+      }
+    }
+  };
+
   // Toggle description expansion
   const toggleDescription = (toolId: string) => {
     if (expandedDescriptions.includes(toolId)) {
@@ -206,6 +285,45 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
   
   // Render the list of tools
   const renderTools = () => {
+    // If Lumo mode is active, show disabled state
+    if (isLumoMode) {
+      return (
+        <div className="p-6 text-center">
+          <div className="bg-gradient-to-br from-[#9e4244]/10 to-[#d88c6a]/10 rounded-lg p-6 border-2 border-dashed border-[#9e4244]/30">
+            <div className="w-16 h-16 bg-gradient-to-br from-[#9e4244] to-[#d88c6a] rounded-full mx-auto mb-4 flex items-center justify-center">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="white" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <path d="M12 2v8"></path>
+                <path d="M18.4 6.6a9 9 0 0 0-12.8 0"></path>
+                <path d="M15 22v-3.3"></path>
+                <path d="M18.6 17.8A9 9 0 0 0 15 8.8"></path>
+                <path d="M9 22v-3.3"></path>
+                <path d="M5.4 17.8A9 9 0 0 1 9 8.8"></path>
+              </svg>
+            </div>
+            <h3 className="text-[#3a3238] font-bold text-lg mb-2">Pure Lumo Intelligence</h3>
+            <p className="text-[#3a3238]/70 text-sm mb-4">
+              Lumo models are specialized for Solana, however they are not equipped with tool calling abilities. 
+              Switch to Standard mode to access tools.
+            </p>
+            <div className="inline-flex items-center gap-2 bg-[#9e4244]/10 px-3 py-1.5 rounded-full">
+              <div className="w-2 h-2 bg-[#9e4244] rounded-full animate-pulse"></div>
+              <span className="text-[#9e4244] text-xs font-medium">Tools disabled in Lumo mode</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     const filteredTools = getFilteredTools();
     const categories = Object.keys(filteredTools);
     
@@ -312,7 +430,10 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
   };
   
   // Get selected model details
-  const getSelectedModelDetails = () => {
+  const getSelectedModelDetails = (): BaseModel | LumoModel => {
+    const lumoModel = LUMO_MODELS.find(model => model.id === selectedModel);
+    if (lumoModel) return lumoModel;
+    
     return AVAILABLE_MODELS.find(model => model.id === selectedModel) || AVAILABLE_MODELS[0];
   };
   
@@ -381,29 +502,101 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
               </h3>
               
               <div className="bg-white rounded-lg border border-[#d1c7b9] p-5 space-y-6">
+                {/* Lumo Mode Toggle */}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <label className="block text-[#3a3238] font-medium mb-1">AI Mode</label>
+                      <p className="text-xs text-[#3a3238]/70">
+                        Choose between standard models or Solana-specialized Lumo models
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                      <button
+                        onClick={handleLumoModeToggle}
+                        className={`relative w-16 h-8 rounded-full transition-all duration-300 ${
+                          isLumoMode 
+                            ? 'bg-gradient-to-r from-[#9e4244] to-[#d88c6a] shadow-lg' 
+                            : 'bg-[#e9e4da] hover:bg-[#d1c7b9]'
+                        }`}
+                      >
+                        <div className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-md transition-all duration-300 flex items-center justify-center ${
+                          isLumoMode ? 'left-9' : 'left-1'
+                        }`}>
+                          {isLumoMode ? (
+                            <div className="w-3 h-3 bg-gradient-to-br from-[#9e4244] to-[#d88c6a] rounded-full"></div>
+                          ) : (
+                            <div className="w-3 h-3 bg-[#d1c7b9] rounded-full"></div>
+                          )}
+                        </div>
+                      </button>
+                      
+                      {/* Interactive mode label */}
+                      <div className={`transition-all duration-300 px-3 py-1 rounded-full text-xs font-medium ${
+                        isLumoMode 
+                          ? 'bg-gradient-to-r from-[#9e4244]/10 to-[#d88c6a]/10 text-[#9e4244] border border-[#9e4244]/20' 
+                          : 'bg-[#f5f0e6] text-[#3a3238]/70 border border-[#d1c7b9]/30'
+                      }`}>
+                        {isLumoMode ? (
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2 h-2 bg-gradient-to-br from-[#9e4244] to-[#d88c6a] rounded-full animate-pulse"></div>
+                            <span>Lumo Mode</span>
+                          </div>
+                        ) : (
+                          <span>Standard Mode</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Lumo mode indicator */}
+                  {isLumoMode && (
+                    <div className="bg-gradient-to-r from-[#9e4244]/10 to-[#d88c6a]/10 rounded-lg p-3 border border-[#9e4244]/20 animate-fadeIn">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-4 h-4 bg-gradient-to-br from-[#9e4244] to-[#d88c6a] rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                        <span className="text-[#9e4244] font-medium text-sm">Lumo Mode Active</span>
+                      </div>
+                      <p className="text-xs text-[#3a3238]/70 ml-6">
+                        Using Solana-specialized models with built-in blockchain knowledge
+                      </p>
+                    </div>
+                  )}
+                </div>
+
                 {/* Model Selection */}
                 <div>
-                  <label className="block text-[#3a3238] font-medium mb-2">Model</label>
+                  <label className="block text-[#3a3238] font-medium mb-2">
+                    {isLumoMode ? 'Lumo Model' : 'AI Model'}
+                  </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {AVAILABLE_MODELS.map(model => {
+                    {(isLumoMode ? LUMO_MODELS : AVAILABLE_MODELS).map(model => {
                       const isSelected = selectedModel === model.id;
                       const isProOnly = model.pro && !isProUser;
                       
                       return (
                         <div
                           key={model.id}
-                          className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
                             isSelected
-                              ? 'border-[#9e4244] bg-[#9e4244]/5'
+                              ? isLumoMode
+                                ? 'border-[#9e4244] bg-gradient-to-br from-[#9e4244]/5 to-[#d88c6a]/5'
+                                : 'border-[#9e4244] bg-[#9e4244]/5'
                               : isProOnly
                                 ? 'border-[#d1c7b9] bg-[#f5f0e6]/50 opacity-70'
                                 : 'border-[#d1c7b9] hover:border-[#9e4244]/30 hover:bg-[#f5f0e6]'
                           }`}
                           onClick={() => handleModelChange(model.id)}
                         >
-                          <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center justify-between mb-2">
                             <div className="font-medium text-[#3a3238] flex items-center gap-2">
                               {model.name}
+                              {isLumoMode && (
+                                <span className="text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-[#9e4244] to-[#d88c6a] text-white font-bold">
+                                  LUMO
+                                </span>
+                              )}
                               {model.pro && (
                                 <span className="text-xs px-1.5 py-0.5 rounded bg-[#9e4244]/10 text-[#9e4244]">
                                   PRO
@@ -412,11 +605,21 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
                             </div>
                             <div className={`w-4 h-4 rounded-full ${
                               isSelected
-                                ? 'bg-[#9e4244] border-2 border-white'
+                                ? 'bg-[#9e4244] border-2 border-white shadow-md'
                                 : 'border border-[#d1c7b9]'
                             }`}>
                             </div>
                           </div>
+                          
+                          {/* Specialty badge for Lumo models */}
+                          {isLumoMode && (model as LumoModel).specialty && (
+                            <div className="mb-2">
+                              <span className="text-xs px-2 py-1 rounded-full bg-[#5c7c7d]/10 text-[#5c7c7d] font-medium">
+                                {(model as LumoModel).specialty}
+                              </span>
+                            </div>
+                          )}
+                          
                           <p className="text-xs text-[#3a3238]/70">{model.description}</p>
                           
                           {isProOnly && (
@@ -458,6 +661,46 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
                           : ''
                       }}
                     />
+                    <style jsx>{`
+                      input[type="range"]::-webkit-slider-thumb {
+                        appearance: none;
+                        height: 18px;
+                        width: 18px;
+                        border-radius: 50%;
+                        background: ${isProUser ? 'linear-gradient(135deg, #9e4244, #d88c6a)' : '#d1c7b9'};
+                        cursor: pointer;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                      }
+                      
+                      input[type="range"]::-moz-range-thumb {
+                        height: 18px;
+                        width: 18px;
+                        border-radius: 50%;
+                        background: ${isProUser ? 'linear-gradient(135deg, #9e4244, #d88c6a)' : '#d1c7b9'};
+                        cursor: pointer;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                      }
+                      
+                      input[type="range"]::-ms-thumb {
+                        height: 18px;
+                        width: 18px;
+                        border-radius: 50%;
+                        background: ${isProUser ? 'linear-gradient(135deg, #9e4244, #d88c6a)' : '#d1c7b9'};
+                        cursor: pointer;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                      }
+                      
+                      input[type="range"]:focus {
+                        outline: none;
+                      }
+                      
+                      input[type="range"]:focus::-webkit-slider-thumb {
+                        box-shadow: 0 0 0 3px rgba(158, 66, 68, 0.2);
+                      }
+                    `}</style>
                   </div>
                   
                   <div className="flex justify-between text-xs text-[#3a3238]/60 mt-1 px-1">
@@ -481,22 +724,29 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
                 <h3 className="text-[#3a3238] font-semibold text-lg flex items-center gap-2">
                   <div className="w-1.5 h-6 bg-gradient-to-b from-[#9e4244] to-[#d88c6a] rounded-full"></div>
                   Tools
+                  {isLumoMode && (
+                    <span className="text-xs px-2 py-1 rounded-full bg-[#9e4244]/10 text-[#9e4244] font-medium">
+                      Disabled in Lumo Mode
+                    </span>
+                  )}
                 </h3>
                 
-                <div className="relative">
-                  <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3a3238]/50" />
-                  <input
-                    type="text"
-                    placeholder="Search tools..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9 pr-4 py-2 rounded-lg border border-[#d1c7b9] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#9e4244]/30"
-                  />
-                </div>
+                {!isLumoMode && (
+                  <div className="relative">
+                    <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3a3238]/50" />
+                    <input
+                      type="text"
+                      placeholder="Search tools..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-9 pr-4 py-2 rounded-lg border border-[#d1c7b9] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#9e4244]/30"
+                    />
+                  </div>
+                )}
               </div>
               
               {/* Free user limitation warning - Updated text */}
-              {!isProUser && (
+              {!isProUser && !isLumoMode && (
                 <div className="bg-[#f5f0e6] border border-[#d1c7b9] rounded-lg p-3 mb-4 flex items-center gap-3">
                   <div className="w-8 h-8 bg-[#9e4244]/10 rounded-full flex items-center justify-center flex-shrink-0">
                     <AlertTriangle size={16} className="text-[#9e4244]" />
@@ -530,8 +780,8 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
                 </div>
               )}
               
-              {/* Selected tools section - only show if there are any */}
-              {selectedTools.length > 0 && (
+              {/* Selected tools section - only show if there are any and not in Lumo mode */}
+              {selectedTools.length > 0 && !isLumoMode && (
                 <div className="mb-6">
                   <h4 className="text-[#3a3238] font-medium text-sm mb-3 flex items-center gap-2">
                     <span className="w-1 h-4 bg-[#9e4244]/30 rounded-full"></span>
@@ -600,7 +850,7 @@ const ToolsAndSettingsModal: React.FC<ToolsAndSettingsModalProps> = ({
               <h4 className="font-medium text-[#3a3238]">Current Setup</h4>
               <p className="text-sm text-[#3a3238]/70 mt-1">
                 {getSelectedModelDetails().name} • Temp: {temperature.toFixed(1)} • 
-                {selectedTools.length} tool{selectedTools.length !== 1 ? 's' : ''} enabled
+                {isLumoMode ? 'Lumo Mode' : `${selectedTools.length} tool${selectedTools.length !== 1 ? 's' : ''} enabled`}
               </p>
             </div>
             
